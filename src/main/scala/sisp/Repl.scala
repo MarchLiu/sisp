@@ -12,8 +12,10 @@ import scala.io.StdIn.readLine
 object Repl {
   val prmt = ">> "
   def main(args: Array[String]) {
-    print(prmt)
-    val line = readLine()
-    println(line)
+    while (true) {
+      print(prmt)
+      val line = readLine()
+      println(line)
+    }
   }
 }
