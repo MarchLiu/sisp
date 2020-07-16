@@ -1,5 +1,7 @@
 package sisp
 
+import scala.io.StdIn.readLine
+
 /**
  * TODO
  *
@@ -11,5 +13,7 @@ object Repl {
   val prmt = ">> "
   def main(args: Array[String]) {
     print(prmt)
+    val line = readLine()
+    println(line)
   }
 }
