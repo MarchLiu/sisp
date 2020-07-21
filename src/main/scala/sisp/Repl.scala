@@ -1,6 +1,7 @@
 package sisp
 
-import jaskell.parsec.State
+import jaskell.parsec.ParsecException
+import sisp.parsers.NumberParser
 
 import scala.io.StdIn.readLine
 
@@ -13,13 +14,16 @@ import scala.io.StdIn.readLine
  */
 object Repl {
   import jaskell.parsec.Txt._
-
+  val parser = new NumberParser
   val prmt = ">> "
   def main(args: Array[String]) {
     while (true) {
       print(prmt)
-      val line:State[Char] = readLine()
-
+      val line = readLine()
+      parser ask line match {
+        case Right(result) => println(result)
+        case Left(error) => println(s"invalid number [$line] error [${error.getMessage}]")
+      }
     }
   }
 }
