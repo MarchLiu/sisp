@@ -30,8 +30,9 @@ object Repl {
     while (true) {
       print(prmt)
       val line = readLine()
-      parser ask line flatMap {
-        _.asInstanceOf[Element].eval(env)
+      parser ask line map {
+        case element: Element => element.eval(env)
+        case any => any
       } match {
         case Right(result) => println(result)
         case Left(error) => println(s" [$line] error [${error.getMessage}]")
