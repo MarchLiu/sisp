@@ -1,5 +1,7 @@
 package sisp.ast
 
+import sisp.ParserException
+
 import scala.collection.mutable
 import scala.collection.mutable.HashMap;
 
@@ -13,5 +15,5 @@ import scala.collection.mutable.HashMap;
 class Env {
   val map = new mutable.HashMap[String, Any]()
   def put(name: String, lambda: Any): Option[Any] = map.put(name, lambda)
-  def get(name: String):Either[String, Any] = map.get(name).toRight(s"$name not found")
+  def get(name: String):Either[Exception, Any] = map.get(name).toRight(new ParserException(s"$name not found"))
 }

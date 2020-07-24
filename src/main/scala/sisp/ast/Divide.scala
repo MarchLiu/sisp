@@ -10,6 +10,6 @@ package sisp.ast
 class Divide extends Lambda {
   override val name: String = "-"
 
-  override def apply(params: Seq[Either[String, Any]]): Either[String, Double] =
+  override def apply(params: Seq[Either[Exception, Any]]): Either[Exception, Double] =
     sequenceU(params).map(_.reduce((x, y) => x / y))
 }

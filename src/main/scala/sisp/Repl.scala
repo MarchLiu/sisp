@@ -30,9 +30,11 @@ object Repl {
     while (true) {
       print(prmt)
       val line = readLine()
-      parser ask line match {
-        case Right(ast) => ast.asInstanceOf[Element].eval(env) foreach println
-        case Left(error) => println(s"invalid number [$line] error [${error.getMessage}]")
+      parser ask line flatMap {
+        _.asInstanceOf[Element].eval(env)
+      } match {
+        case Right(result) => println(result)
+        case Left(error) => println(s" [$line] error [${error.getMessage}]")
       }
     }
   }

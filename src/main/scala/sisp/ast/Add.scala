@@ -10,7 +10,7 @@ package sisp.ast
 class Add extends Lambda {
   override val name: String = "+"
 
-  override def apply(params: Seq[Either[String, Any]]): Either[String, Double] = {
+  override def apply(params: Seq[Either[Exception, Any]]): Either[Exception, Double] = {
     sequenceU(params).map(_.sum)
   }
 }

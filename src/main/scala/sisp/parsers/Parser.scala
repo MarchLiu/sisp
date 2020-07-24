@@ -1,9 +1,7 @@
 package sisp.parsers
 
-import jaskell.parsec.{Parsec, SkipWhitespaces, State, Try}
-import jaskell.parsec.Combinator.{attempt, between, choice, sepBy1}
-import jaskell.parsec.Txt.{ch, skipWhiteSpaces}
-import sisp.ast.Expression
+import jaskell.parsec.Combinator.attempt
+import jaskell.parsec.{Parsec, State, Try}
 
 /**
  * TODO
@@ -15,7 +13,7 @@ import sisp.ast.Expression
 class Parser extends Parsec[Any, Char]{
   val number: Try[Any, Char] = attempt(new NumberParser)
   override def ask(s: State[Char]): Either[Exception, Any] = {
-    val parser: Parsec[Any, Char] = choice(attempt(new ExprParser), number, attempt(new NameParser))
+    val parser: Parsec[Any, Char] = attempt(new ExprParser) <|> attempt(number) <|> attempt(new NameParser)
     parser ? s
   }
 }

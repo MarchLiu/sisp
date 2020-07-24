@@ -8,5 +8,5 @@ package sisp.ast
  * @since 2020/07/21 18:26
  */
 trait Element {
-  def eval(env: Env): Either[String, Any]
+  def eval(env: Env): Either[Exception, Any]
 }

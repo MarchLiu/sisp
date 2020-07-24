@@ -8,5 +8,5 @@ package sisp.ast
  * @since 2020/07/21 18:27
  */
 case class NumberElement(num: Double) extends Element {
-  override def eval(env: Env): Either[String, Any] = Right(num)
+  override def eval(env: Env): Either[Exception, Any] = Right(num)
 }

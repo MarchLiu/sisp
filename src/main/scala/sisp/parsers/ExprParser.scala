@@ -1,11 +1,10 @@
 package sisp.parsers
 
+import jaskell.parsec.Atom.pack
 import jaskell.parsec.Combinator.{between, sepBy1}
 import jaskell.parsec.Txt.{ch, skipWhiteSpaces}
 import jaskell.parsec.{Parsec, SkipWhitespaces, State}
-import sisp.ast.{Element, Expression, NumberElement}
-
-import scala.collection.mutable
+import sisp.ast.{Element, Expression}
 
 /**
  * TODO
@@ -20,11 +19,8 @@ class ExprParser extends Parsec[Any, Char]{
 
   override def ask(s: State[Char]): Either[Exception, Element] = {
     val parser =
-      between(ch('(') >> skip, skip >> ch(')'), sepBy1(elementParser, skip)) >>= { vals =>
-        _ => {
-          Right(new Expression(vals))
-        }
-      }
+      between(ch('(') >> skip, skip >> ch(')'), sepBy1(elementParser, skip)) >>=
+        {vals => pack(new Expression(vals))}
     parser ? s
   }
 }
