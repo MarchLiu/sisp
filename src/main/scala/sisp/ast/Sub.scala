@@ -8,8 +8,7 @@ package sisp.ast
  * @since 2020/07/21 19:23
  */
 class Sub extends Lambda {
-  override val name: String = "-"
 
-  override def apply(params: Seq[Either[Exception, Any]]): Either[Exception, Double] =
-    sequenceU(params).map(_.reduce((x, y)=> x - y))
+  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] =
+    prepare(env, params).map(_.asInstanceOf[Seq[Double]].reduce((x, y)=> x - y))
 }

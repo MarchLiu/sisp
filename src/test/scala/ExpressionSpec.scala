@@ -1,6 +1,6 @@
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import sisp.ast.{Add, Divide, Env, Expression, NumberElement, Sub}
+import sisp.ast.{Add, Divide, Env, Expression, Name, NumberElement, Sub}
 import sisp.parsers.Parser
 
 /**
@@ -28,7 +28,7 @@ class ExpressionSpec extends AnyFlatSpec with Matchers {
   "Name" should "parse a name string from source" in {
     val parser = new Parser
     parser ? "name" match {
-      case Right(value) => value.asInstanceOf[String] should be ("name")
+      case Right(value) => value.asInstanceOf[Name].name should be ("name")
       case any => fail(s"expect [name] but get $any")
     }
   }

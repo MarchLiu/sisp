@@ -1,9 +1,10 @@
 package sisp.parsers
 
-import jaskell.parsec.Atom.is
+import jaskell.parsec.Atom.{is, pack}
 import jaskell.parsec.Combinator.many1
 import jaskell.parsec.{Parsec, State}
 import jaskell.parsec.Txt.mkString
+import sisp.ast.Name
 /**
  * TODO
  *
@@ -13,7 +14,9 @@ import jaskell.parsec.Txt.mkString
  */
 class NameParser extends Parsec[Any, Char] {
   val predicate:Function[Char, Boolean] = {c => !(c==')'||c.isWhitespace)}
-  val parser: Parsec[String, Char] = many1(is(predicate)) >>= mkString
+  val parser: Parsec[Name, Char] = many1(is(predicate)) >>= mkString >>= { name =>
+    pack(new Name(name))
+  }
 
   override def ask(s: State[Char]): Either[Exception, Any] = parser ? s
 }

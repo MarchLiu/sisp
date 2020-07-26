@@ -8,8 +8,7 @@ package sisp.ast
  * @since 2020/07/21 19:23
  */
 class Product extends Lambda {
-  override val name: String = "-"
 
-  override def apply(params: Seq[Either[Exception, Any]]): Either[Exception, Double] =
-    sequenceU(params).map(_.product)
+  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] =
+    prepare(env, params).map(_.asInstanceOf[Seq[Double]].product)
 }

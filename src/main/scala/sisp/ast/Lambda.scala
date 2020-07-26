@@ -1,5 +1,8 @@
 package sisp.ast
 
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+
 /**
  * TODO
  *
@@ -8,19 +11,22 @@ package sisp.ast
  * @since 2020/07/21 20:59
  */
 trait Lambda {
-  val name: String
 
-  // scalaz 有此功能的封装，这里为了不额外引入复杂性，手工实现一个
-  def sequenceU(params: Seq[Either[Exception, Any]]): Either[Exception, List[Double]] =
-    params.foldRight(Right(Nil): Either[Exception, List[Double]]) { (elem, acc) =>
+  def prepare(env: Env, params: Seq[Any]): Either[Exception, Seq[Any]] = {
+    params.foldRight(Right(Nil): Either[Exception, List[Any]]) { (param, acc) =>
       for {
         xs <- acc
-        x <- elem
-      } yield x.asInstanceOf[Double] :: xs
+        x <- param match {
+          case element: Element =>
+            element.eval(env)
+          case _ =>
+            Right(param)
+        }
+      } yield x :: xs
     }
+  }
 
-  def apply(params: Seq[Either[Exception, Any]]): Either[Exception, Double]
-
+  def apply(env: Env, params: Seq[Any]): Either[Exception, Any]
 }
 
 

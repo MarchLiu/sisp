@@ -1,7 +1,7 @@
 package sisp
 
 import jaskell.parsec.ParsecException
-import sisp.ast.{Add, Divide, Element, Env, Sub}
+import sisp.ast.{Add, Def, Divide, Element, Env, Sub}
 import sisp.parsers.{NumberParser, Parser}
 
 import scala.io.StdIn.readLine
@@ -21,6 +21,7 @@ object Repl {
   val prmt = ">> "
 
   val env = new Env;
+  env.put("def", new Def)
   env.put("+", new Add)
   env.put("-", new Sub)
   env.put("*", new sisp.ast.Product)
@@ -30,9 +31,10 @@ object Repl {
     while (true) {
       print(prmt)
       val line = readLine()
-      parser ask line map {
+      parser ask line flatMap {
         case element: Element => element.eval(env)
-        case any => any
+        case result: Either[Exception, Any] => result
+        case any => Right(any)
       } match {
         case Right(result) => println(result)
         case Left(error) => println(s" [$line] error [${error.getMessage}]")

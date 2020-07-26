@@ -8,9 +8,8 @@ package sisp.ast
  * @since 2020/07/21 19:23
  */
 class Add extends Lambda {
-  override val name: String = "+"
 
-  override def apply(params: Seq[Either[Exception, Any]]): Either[Exception, Double] = {
-    sequenceU(params).map(_.sum)
+  override def apply(env: Env, params: Seq[Any]): Either[Exception, Double] = {
+    prepare(env, params).map(_.asInstanceOf[Seq[Double]].sum)
   }
 }
