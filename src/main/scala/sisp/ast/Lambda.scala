@@ -26,7 +26,17 @@ trait Lambda {
     }
   }
 
+  def sequenceU[T](params: Seq[Either[Exception, T]]): Either[Exception, List[T]] =
+    params.foldRight(Right(Nil): Either[Exception, List[T]]) { (elem, acc) =>
+      for {
+        xs <- acc
+        x <- elem
+      } yield x.asInstanceOf[T] :: xs
+    }
+
   def apply(env: Env, params: Seq[Any]): Either[Exception, Any]
+
+
 }
 
 

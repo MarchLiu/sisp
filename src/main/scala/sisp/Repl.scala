@@ -1,7 +1,7 @@
 package sisp
 
 import jaskell.parsec.ParsecException
-import sisp.ast.{Add, Def, Divide, Element, Env, Sub}
+import sisp.ast.{Add, Def, Divide, Element, Env, Eq, Great, GreatOrEquals, Less, LessOrEquals, Sub}
 import sisp.parsers.{NumberParser, Parser}
 
 import scala.io.StdIn.readLine
@@ -20,12 +20,19 @@ object Repl {
   val parser = new Parser
   val prmt = ">> "
 
-  val env = new Env;
+  val env = new Env
   env.put("def", new Def)
+
   env.put("+", new Add)
   env.put("-", new Sub)
   env.put("*", new sisp.ast.Product)
   env.put("/", new Divide)
+  env.put("==", new Eq)
+  env.put("!=", new Eq)
+  env.put(">", new Great)
+  env.put("<", new Less)
+  env.put(">=", new GreatOrEquals)
+  env.put("<=", new LessOrEquals)
 
   def main(args: Array[String]) {
     while (true) {

@@ -14,6 +14,9 @@ class Def extends Lambda {
 
   override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
     val name = params.head.asInstanceOf[Name].name
+    if(env.findIn(name).isRight){
+      return Left(new ParserException(s"$name exists"))
+    }
     val result = params(1) match {
       case element: Element => element.eval(env)
       case _ => params(1)
