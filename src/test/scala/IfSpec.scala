@@ -97,6 +97,10 @@ class IfSpec extends AnyFlatSpec with Matchers {
     parser ask "(if (< 5.1 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Right(0))
+
+    parser ask "(if (< 1 1.5 2 2.1) 1 0)" flatMap { expr =>
+      expr.asInstanceOf[Expression].eval(env)
+    } should be(Right(1))
   }
 
 }

@@ -44,5 +44,10 @@ class AndSpec extends AnyFlatSpec with Matchers {
     parser ask "(and (> 0 0) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
     } should be (Right(false))
+
+    (parser ask "(and (> 0 abc) (> 2 1))" flatMap { element =>
+      element.asInstanceOf[Element].eval(env)
+    }).isLeft should be (true)
+
   }
 }
