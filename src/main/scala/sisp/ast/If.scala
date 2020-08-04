@@ -16,7 +16,7 @@ class If extends Lambda {
       return Left(new ParserException(s"invalid if statement (if $params), parameters size should be 2 or 3"))
     }
 
-    if (IsTrue.isTrue(params.head)) {
+    if (IsTrue.isTrue(env.eval(params.head))) {
       env.eval(params(1))
     } else {
       if (params.size == 3) {
