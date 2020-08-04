@@ -9,7 +9,10 @@ package sisp.ast
  */
 class Do extends Lambda {
   override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
-    params.drop(1).foreach {env.eval}
-    env.eval(params.last)
+    val environment:Env = new Env
+    environment.global = Some(env)
+
+    params.dropRight(1).foreach {environment.eval}
+    environment eval params.last
   }
 }
