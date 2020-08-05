@@ -37,4 +37,11 @@ class Env {
       case _ => Right(param)
     }
   }
+
+  def copy(): Env = {
+    val re = new Env
+    re.global = None
+    re.local.addAll(this.local)
+    re
+  }
 }
