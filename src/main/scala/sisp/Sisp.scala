@@ -1,6 +1,6 @@
 package sisp
 
-import sisp.ast.{Add, Def, Divide, Element, Env, Eq, Fn, Great, GreatOrEquals, If, IsFalse, IsTrue, Less, LessOrEquals, Recur, Sub}
+import sisp.ast.{Add, Def, Divide, Element, Env, Eq, First, Fn, Great, GreatOrEquals, If, IsFalse, IsTrue, Last, Less, LessOrEquals, ListExpr, Recur, Rest, Sub}
 import sisp.parsers.Parser
 
 /**
@@ -35,6 +35,11 @@ class Sisp extends Env{
   this.put("<", new Less)
   this.put(">=", new GreatOrEquals)
   this.put("<=", new LessOrEquals)
+
+  this.put("list", new ListExpr)
+  this.put("first", new First)
+  this.put("last", new Last)
+  this.put("rest", new Rest)
 
   def parse(source:String): Either[Exception, Any]  = {
     read(source) flatMap eval
