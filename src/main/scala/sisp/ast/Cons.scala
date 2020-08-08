@@ -11,13 +11,18 @@ import sisp.ParserException
  */
 class Cons extends Lambda {
   override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
-    if(params.size != 2 || !params(1).isInstanceOf[Seq[Any]]) {
+    if (params.size != 2) {
       return Left(new ParserException(s"cons's formal (cons x seq) but get (cons $params)"))
     }
 
-    for {
-      value <- env eval params.head
-      values <- env eval params(1)
-    } yield Seq(value) ++ values.asInstanceOf
+    env.eval(params(1)).flatMap { seq =>
+      if(!isList(seq)) {
+        return Left(new ParserException(s"cons's formal (cons x seq) but get (cons $seq)"))
+      }
+      for {
+        value <- env eval params.head
+        values <- elements(seq)
+      } yield Quote.fromSeq(Seq(value) ++ values.asInstanceOf)
+    }
   }
 }

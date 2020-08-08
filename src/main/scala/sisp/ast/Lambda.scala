@@ -1,7 +1,9 @@
 package sisp.ast
 
-import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
+import sisp.ParserException
+
+import scala.jdk.javaapi.CollectionConverters
+
 
 /**
  * TODO
@@ -33,6 +35,18 @@ trait Lambda {
         x <- elem
       } yield x.asInstanceOf[T] :: xs
     }
+
+  def isList(obj: Any): Boolean = {
+    obj.isInstanceOf[Seq[_]] || obj.isInstanceOf[List[_]] ||
+      (obj.isInstanceOf[Quote] && obj.asInstanceOf[Quote].value.isInstanceOf[Expression])
+  }
+
+  def elements(obj: Any): Either[Exception, Seq[Any]] = obj match {
+    case seq: Seq[_] => Right(seq.asInstanceOf)
+    case list: java.util.List[_] => Right(CollectionConverters.asScala(list).toSeq)
+    case quote: Quote if quote.value.isInstanceOf[Expression] => Right(quote.value.asInstanceOf[Expression].elements)
+    case _ => Left(new ParserException(s"$obj is't a valid list"))
+  }
 
   def apply(env: Env, params: Seq[Any]): Either[Exception, Any]
 

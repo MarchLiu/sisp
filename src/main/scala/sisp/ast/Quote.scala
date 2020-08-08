@@ -10,3 +10,9 @@ package sisp.ast
 class Quote(val value: Any) extends Element {
   override def eval(env: Env): Either[Exception, Any] = Right(value)
 }
+
+object Quote {
+  def fromSeq(seq: Seq[_]): Quote = {
+    new Quote(new Expression(seq))
+  }
+}

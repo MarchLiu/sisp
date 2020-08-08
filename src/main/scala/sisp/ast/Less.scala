@@ -13,7 +13,7 @@ class Less extends Compare {
   override def cmp(x: Any, y: Any): Either[Exception, Boolean] = {
     x match {
       case value: Number if y.isInstanceOf[Number] => Right(value.doubleValue() < y.asInstanceOf[Number].doubleValue())
-      case value: Ordered[x.type] if y.isInstanceOf[x.type] =>
+      case value: Ordered[_] if y.isInstanceOf[x.type] =>
         Right(value.compareTo(y.asInstanceOf) < 0)
       case _ =>
         Left(new ParserException(s"$x and $y are type of [$x.type] that is't comparable"))

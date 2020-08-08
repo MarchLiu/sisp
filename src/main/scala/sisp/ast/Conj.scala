@@ -11,15 +11,21 @@ import sisp.ParserException
  */
 class Conj extends Lambda {
   override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
-    if (params.size != 2 || !params(0).isInstanceOf[Seq[Any]]) {
+    if (params.size != 2) {
       return Left(new ParserException(s"conj's formal (conj seq x) but get (conj $params)"))
     }
 
-    for {
-      values <- env eval params.head
-      value <- env eval params(1)
-    } yield {
-      values.asInstanceOf[Seq[Any]].appended(value)
+    env.eval(params.head) flatMap { seq =>
+      if (!isList(seq)) {
+        return Left(new ParserException(s"conj's formal (conj seq x) but get (conj $seq)"))
+      }
+
+      for {
+        values <- elements(params.head)
+        value <- env eval params(1)
+      } yield {
+        Quote.fromSeq(values.asInstanceOf[Seq[Any]].appended(value))
+      }
     }
   }
 }
