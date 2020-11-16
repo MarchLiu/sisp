@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.{Success, Try}
+
 /**
  * TODO
  *
@@ -8,7 +10,7 @@ package sisp.ast
  * @since 2020/08/05 18:41
  */
 class Quote(val value: Any) extends Element {
-  override def eval(env: Env): Either[Exception, Any] = Right(value)
+  override def eval(env: Env): Try[Any] = Success(value)
 }
 
 object Quote {

@@ -5,6 +5,7 @@ import sisp.ast.{Add, Def, Divide, Element, Env, Eq, Great, GreatOrEquals, Less,
 import sisp.parsers.{NumberParser, Parser}
 
 import scala.io.StdIn.readLine
+import scala.util.{Failure, Success}
 
 /**
  * TODO
@@ -40,11 +41,11 @@ object Repl {
       val line = readLine()
       parser ask line flatMap {
         case element: Element => element.eval(env)
-        case result: Either[Exception, Any] => result
-        case any => Right(any)
+        case result: Failure[Any] => result
+        case any => Success(any)
       } match {
-        case Right(result) => println(result)
-        case Left(error) => println(s" [$line] error [${error.getMessage}]")
+        case Success(result) => println(result)
+        case Failure(error) => println(s" [$line] error [${error.getMessage}]")
       }
     }
   }

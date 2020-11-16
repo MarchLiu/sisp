@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.Try
+
 /**
  * TODO
  *
@@ -9,6 +11,6 @@ package sisp.ast
  */
 class Divide extends Lambda {
 
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Double] =
+  override def apply(env: Env, params: Seq[Any]): Try[Double] =
     prepare(env, params).map(_.asInstanceOf[Seq[Double]].reduce(((x, y) => x / y)))
 }

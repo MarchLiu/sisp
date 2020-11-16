@@ -5,6 +5,7 @@ import sisp.ast.{Add, And, Def, Divide, Env, Eq, Fn, Great, GreatOrEquals, If, I
 import sisp.parsers.Parser
 
 import scala.util
+import scala.util.Success
 
 /**
  * TODO
@@ -18,31 +19,31 @@ class FnSpec extends AnyFlatSpec with Matchers {
 
   "Fn" should "define a function" in {
     sisp parse "(def add (fn (x y) (+ x y)))" should
-      matchPattern {case Right(_) =>}
+      matchPattern {case Success(_) =>}
 
-    sisp parse "(add 3.14 3.14)" should be (Right(6.28))
+    sisp parse "(add 3.14 3.14)" should be (Success(6.28))
 
-    sisp parse "(add 2 3)" should be (Right(5))
+    sisp parse "(add 2 3)" should be (Success(5))
 
-    sisp parse "(add 3 2)" should be (Right(5))
+    sisp parse "(add 3 2)" should be (Success(5))
 
   }
 
   "Recur" should "define a recursive function" in {
     sisp parse "(def increment (fn (x) (if (< x 10) (recur (* 2 x)) x)))" should
-      matchPattern {case Right(_) =>}
-    sisp parse "(increment 2)" should be (Right(16))
+      matchPattern {case Success(_) =>}
+    sisp parse "(increment 2)" should be (Success(16))
   }
 
   "Static Bind" should "success only run preview spec before " in {
-    if(sisp.get("add").isLeft) {
+    if(sisp.get("add").isFailure) {
       sisp parse "(def add (fn (x y) (+ x y)))" should
-        matchPattern { case Right(_) => }
+        matchPattern { case Success(_) => }
     }
 
     sisp parse "(def step6 (fn (x) (if (< x 10) (recur (add 6 x)) x)))" should
-      matchPattern {case Right(_) =>}
-    sisp parse "(step6 2)" should be (Right(14))
+      matchPattern {case Success(_) =>}
+    sisp parse "(step6 2)" should be (Success(14))
 
   }
 }

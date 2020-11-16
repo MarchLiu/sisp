@@ -3,6 +3,8 @@ import org.scalatest.matchers.should.Matchers
 import sisp.ast._
 import sisp.parsers.Parser
 
+import scala.util.Success
+
 /**
  * TODO
  *
@@ -35,29 +37,29 @@ class CondSpec extends AnyFlatSpec with Matchers {
   "Equals" should "check equals" in {
     parser ask "(cond (== 5 5) 1 (== 9 (* 3 3)) 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
-    } should be(Right(1))
+    } should be(Success(1))
 
     parser ask "(cond (== 5.01 5) 1 (== 9 (* 3 3)) 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
-    } should be(Right(0))
+    } should be(Success(0))
 
     parser ask "(cond (== 5 5.0000001) 1 (* 3 3))" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
-    } should be(Right(9))
+    } should be(Success(9))
   }
 
   "Greater" should "true if x > y " in {
     parser ask "(cond (> 5.0001 5) (* 2 3.14) 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
-    } should be(Right(6.28))
+    } should be(Success(6.28))
 
     parser ask "(cond (> 5 5) 1 (> 3.14 3) 3.14)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
-    } should be(Right(3.14))
+    } should be(Success(3.14))
 
     parser ask "(cond (> 5 5.1) 1 (> 3.14 3.14) 3.14 (* 2 3.14))" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
-    } should be(Right(6.28))
+    } should be(Success(6.28))
   }
 
 }

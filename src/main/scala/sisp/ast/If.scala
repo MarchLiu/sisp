@@ -2,6 +2,8 @@ package sisp.ast
 
 import sisp.ParserException
 
+import scala.util.{Failure, Success, Try}
+
 /**
  * TODO
  *
@@ -11,9 +13,9 @@ import sisp.ParserException
  */
 class If extends Lambda {
 
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Any] = {
     if (params.size < 2 || params.size > 3) {
-      return Left(new ParserException(s"invalid if statement (if $params), parameters size should be 2 or 3"))
+      return Failure(new ParserException(s"invalid if statement (if $params), parameters size should be 2 or 3"))
     }
 
     env.eval(params.head) map IsTrue.isTrue flatMap { check =>
@@ -23,7 +25,7 @@ class If extends Lambda {
         if (params.size == 3) {
           env.eval(params(2))
         } else {
-          Right(Nil)
+          Success(Nil)
         }
       }
     }

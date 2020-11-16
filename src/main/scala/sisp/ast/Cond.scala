@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.{Success, Try}
+
 /**
  * TODO
  *
@@ -8,11 +10,11 @@ package sisp.ast
  * @since 2020/08/04 14:58
  */
 class Cond extends Lambda {
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Any] = {
     val isEvent = params.size % 2 == 0
-    val elseStat: () => Either[Exception, Any] = () => {
+    val elseStat: () => Try[Any] = () => {
       if (isEvent) {
-        Right(null)
+        Success(null)
       } else {
         env.eval(params.last)
       }
@@ -20,7 +22,7 @@ class Cond extends Lambda {
 
     val dispatch = if (isEvent) params else params.dropRight(1)
     dispatch.sliding(2, 2).map(pair => (env.eval(pair.head), pair.last)) collectFirst {
-      case (Right(true), expr) => env.eval(expr)
+      case (Success(true), expr) => env.eval(expr)
     } getOrElse elseStat()
   }
 }

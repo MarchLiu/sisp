@@ -5,6 +5,7 @@ import java.util
 import sisp.ParserException
 
 import scala.collection.View.Collect
+import scala.util.{Failure, Try}
 
 /**
  * TODO
@@ -14,9 +15,9 @@ import scala.collection.View.Collect
  * @since 2020/07/30 17:45
  */
 class IsTrue extends Lambda {
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Boolean] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Boolean] = {
     if(params.size != 1){
-      return Left(new ParserException(s"true? function require single parameter"))
+      return Failure(new ParserException(s"true? function require single parameter"))
     }
     env.eval(params.head) map IsTrue.isTrue
   }
@@ -27,7 +28,7 @@ object IsTrue {
   // isTrue not eval anything, just check it
   def isTrue(param: Any) : Boolean = param match {
     case boolean: Boolean => boolean
-    case number: Number => number != 0
+    case number: Number => number.intValue() != 0
     case either: Either[_,  _] => either.isRight
     case opt: Option[_] => opt.isDefined
     case coll: util.Collection[_] => !coll.isEmpty

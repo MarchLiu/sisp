@@ -3,6 +3,8 @@ import org.scalatest.matchers.should.Matchers
 import sisp.ast.{Add, And, Def, Divide, Do, Env, Eq, Great, GreatOrEquals, If, IsFalse, IsTrue, Less, LessOrEquals, Sub}
 import sisp.parsers.Parser
 
+import scala.util.Success
+
 /**
  * TODO
  *
@@ -34,11 +36,11 @@ class DoSpec extends AnyFlatSpec with Matchers {
   env.put("<=", new LessOrEquals)
 
   "Do" should "run sources in sort" in {
-    parser ask "(do (+ 7 5) (- 3 1))" flatMap env.eval should be (Right(2))
+    parser ask "(do (+ 7 5) (- 3 1))" flatMap env.eval should be (Success(2))
   }
 
   "Do Def" should "run sources with def" in {
-    parser ask "(do (def pi 3.14) (+ 7 5) (- pi 1))" flatMap env.eval should be (Right(2.14))
+    parser ask "(do (def pi 3.14) (+ 7 5) (- pi 1))" flatMap env.eval should be (Success(2.14))
   }
 
 }

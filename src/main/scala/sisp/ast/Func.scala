@@ -2,6 +2,8 @@ package sisp.ast
 
 import sisp.ParserException
 
+import scala.util.{Failure, Try}
+
 /**
  * TODO
  *
@@ -10,13 +12,13 @@ import sisp.ParserException
  * @since 2020/08/04 20:55
  */
 class Func(val args: Seq[Name], val body: Seq[Any], our:Env) extends Recurable {
-  override def invoke(env: Env, params: Seq[Any]): Either[Exception, Any] = {
+  override def invoke(env: Env, params: Seq[Any]): Try[Any] = {
     val environment = new Env
     val local = our.copy()
     local.global = Some(env)
     environment.global = Some(local)
     if(params.size != args.size) {
-      return Left(new ParserException(s"the function invoke need ${args.size} parameters bug given ${params.size}"))
+      return Failure(new ParserException(s"the function invoke need ${args.size} parameters bug given ${params.size}"))
     }
     args zip params foreach {pair =>
       val (name, parameter) = pair

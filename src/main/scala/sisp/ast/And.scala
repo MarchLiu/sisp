@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.{Failure, Success, Try}
+
 /**
  * TODO
  *
@@ -9,15 +11,15 @@ package sisp.ast
  */
 class And extends Lambda {
 
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Boolean] = prepare(env, params) flatMap { elements =>
+  override def apply(env: Env, params: Seq[Any]): Try[Boolean] = prepare(env, params) flatMap { elements =>
     for (item <- params) {
       env.eval(item) map IsTrue.isTrue match {
-        case left: Left[_, _] => return left
-        case Right(false) => return Right(false)
-        case Right(true) => Right(true)
+        case failure: Failure[_] => return failure
+        case Success(false) => return Success(false)
+        case Success(true) => Success(true)
       }
     }
 
-    return Right(true)
+    return Success(true)
   }
 }

@@ -2,6 +2,8 @@ package sisp.ast
 
 import sisp.ParserException
 
+import scala.util.{Failure, Success, Try}
+
 /**
  * TODO
  *
@@ -10,21 +12,21 @@ import sisp.ParserException
  * @since 2020/08/05 19:59
  */
 class First extends Lambda {
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Any] = {
     if (params.size != 1) {
-      return Left(new ParserException(s"first function should accept only one parameter, but $params given"))
+      return Failure(new ParserException(s"first function should accept only one parameter, but $params given"))
     }
 
     env.eval(params.head) flatMap { param =>
       if (!isList(param)) {
-        return Left(new ParserException(s"first function require one list, but $param given"))
+        return Failure(new ParserException(s"first function require one list, but $param given"))
       }
 
       elements(param) flatMap  { seq =>
         if (seq.isEmpty) {
-          return Right(null)
+          return Success(null)
         }
-        return Right(seq.head)
+        return Success(seq.head)
       }
     }
   }

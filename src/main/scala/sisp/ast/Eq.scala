@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.{Success, Try}
+
 /**
  * TODO
  *
@@ -8,5 +10,5 @@ package sisp.ast
  * @since 2020/07/28 16:50
  */
 class Eq extends Compare {
-  override def cmp(x: Any, y: Any): Either[Exception, Boolean] = Right(x == y)
+  override def cmp(x: Any, y: Any): Try[Boolean] = Success(x == y)
 }

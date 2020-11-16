@@ -3,6 +3,8 @@ import org.scalatest.matchers.should.Matchers
 import sisp.ast.{Add, And, Def, Divide, Element, Env, Eq, Expression, Great, GreatOrEquals, If, IsFalse, IsTrue, Less, LessOrEquals, Sub}
 import sisp.parsers.Parser
 
+import scala.util.Success
+
 /**
  * TODO
  *
@@ -35,19 +37,19 @@ class AndSpec extends AnyFlatSpec with Matchers {
   "XAndY" should "true only (and true true)" in {
     parser ask "(and (> 1 0) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    } should be (Right(true))
+    } should be (Success(true))
 
     parser ask "(and (> 1 0) (< 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    } should be (Right(false))
+    } should be (Success(false))
 
     parser ask "(and (> 0 0) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    } should be (Right(false))
+    } should be (Success(false))
 
     (parser ask "(and (> 0 abc) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    }).isLeft should be (true)
+    }).isFailure should be (true)
 
   }
 }

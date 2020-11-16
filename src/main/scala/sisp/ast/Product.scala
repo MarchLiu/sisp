@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.Try
+
 /**
  * TODO
  *
@@ -9,6 +11,6 @@ package sisp.ast
  */
 class Product extends Lambda {
 
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] =
+  override def apply(env: Env, params: Seq[Any]): Try[Any] =
     prepare(env, params).map(_.asInstanceOf[Seq[Double]].product)
 }

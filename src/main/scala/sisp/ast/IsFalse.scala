@@ -4,6 +4,8 @@ import java.util
 
 import sisp.ParserException
 
+import scala.util.{Failure, Try}
+
 /**
  * TODO
  *
@@ -12,9 +14,9 @@ import sisp.ParserException
  * @since 2020/07/30 17:53
  */
 class IsFalse  extends IsTrue {
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Boolean] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Boolean] = {
     if(params.size != 1){
-      return Left(new ParserException(s"false? function require single parameter"))
+      return Failure(new ParserException(s"false? function require single parameter"))
     }
     env.eval(params.head) map {result => !IsTrue.isTrue(result)}
   }

@@ -2,6 +2,8 @@ package sisp.ast
 
 import sisp.ParserException
 
+import scala.util.{Failure, Success, Try}
+
 /**
  * TODO
  *
@@ -12,15 +14,15 @@ import sisp.ParserException
 
 class Def extends Lambda {
 
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Any] = {
     val name = params.head.asInstanceOf[Name].name
-    if(env.findIn(name).isRight){
-      return Left(new ParserException(s"$name exists"))
+    if(env.findIn(name).isSuccess){
+      return Failure(new ParserException(s"$name exists"))
     }
 
     env.eval(params(1)) flatMap { value =>
       env.put(name, value)
-      Right(value)
+      Success(value)
     }
   }
 }

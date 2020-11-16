@@ -3,6 +3,8 @@ import org.scalatest.matchers.should.Matchers
 import sisp.ast._
 import sisp.parsers.Parser
 
+import scala.util.Success
+
 /**
  * TODO
  *
@@ -36,18 +38,18 @@ class OrSpec extends AnyFlatSpec with Matchers {
   "XOrY" should "true only (and true true)" in {
     parser ask "(or (> 1 0) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    } should be (Right(true))
+    } should be (Success(true))
 
     parser ask "(or (> 1 0) (< 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    } should be (Right(true))
+    } should be (Success(true))
 
     parser ask "(or (>= 1 0) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    } should be (Right(true))
+    } should be (Success(true))
 
     parser ask "(or (> 0 0) (> 1 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
-    } should be (Right(false))
+    } should be (Success(false))
   }
 }

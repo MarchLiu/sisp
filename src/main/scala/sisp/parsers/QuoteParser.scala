@@ -5,6 +5,8 @@ import jaskell.parsec.Atom.pack
 import jaskell.parsec.Txt.ch
 import sisp.ast.Quote
 
+import scala.util.Try
+
 /**
  * TODO
  *
@@ -12,8 +14,8 @@ import sisp.ast.Quote
  * @version 1.0.0
  * @since 2020/08/05 18:42
  */
-class QuoteParser extends Parsec[Any, Char]{
-  override def ask(s: State[Char]): Either[Exception, Any] = {
+class QuoteParser extends Parsec[Char, Any]{
+  override def ask(s: State[Char]): Try[Any] = {
     val parser = new Parser
     val psc = ch('\'') >> parser >>= {value => pack(new Quote(value))}
     psc ? s

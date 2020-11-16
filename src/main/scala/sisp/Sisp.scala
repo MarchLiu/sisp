@@ -3,6 +3,8 @@ package sisp
 import sisp.ast.{Add, Def, Divide, Element, Env, Eq, First, Fn, Great, GreatOrEquals, If, IsFalse, IsTrue, Last, Less, LessOrEquals, ListExpr, Recur, Rest, Sub}
 import sisp.parsers.Parser
 
+import scala.util.Try
+
 /**
  * TODO
  *
@@ -41,11 +43,11 @@ class Sisp extends Env{
   this.put("last", new Last)
   this.put("rest", new Rest)
 
-  def parse(source:String): Either[Exception, Any]  = {
+  def parse(source:String): Try[Any]  = {
     read(source) flatMap eval
   }
 
-  def read(source: String): Either[Exception, Any] = {
+  def read(source: String): Try[Any] = {
     parser ask source
   }
 

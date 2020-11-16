@@ -3,6 +3,8 @@ import org.scalatest.matchers.should.Matchers
 import sisp.ast.{Add, Divide, Env, Expression, Name, NumberElement, Sub}
 import sisp.parsers.Parser
 
+import scala.util.Success
+
 /**
  * TODO
  *
@@ -20,7 +22,7 @@ class ExpressionSpec extends AnyFlatSpec with Matchers {
   "Number" should "extract number element from number string" in {
     val parser = new Parser
     parser ? "123" match {
-      case Right(value) => value.asInstanceOf[NumberElement] should be (NumberElement(123))
+      case Success(value) => value.asInstanceOf[NumberElement] should be (NumberElement(123))
       case any => fail(s"expect 123 but get $any")
     }
   }
@@ -28,7 +30,7 @@ class ExpressionSpec extends AnyFlatSpec with Matchers {
   "Name" should "parse a name string from source" in {
     val parser = new Parser
     parser ? "name" match {
-      case Right(value) => value.asInstanceOf[Name].name should be ("name")
+      case Success(value) => value.asInstanceOf[Name].name should be ("name")
       case any => fail(s"expect [name] but get $any")
     }
   }
@@ -36,11 +38,11 @@ class ExpressionSpec extends AnyFlatSpec with Matchers {
   "Basic" should "get result for simple expressions" in {
     val parser = new Parser
     parser ? "(+ 1 2 3)" match {
-      case Right(result) => result.asInstanceOf[Expression].eval(env) should be (Right(6))
+      case Success(result) => result.asInstanceOf[Expression].eval(env) should be (Success(6))
       case any => fail(s"expect sum 1, 2, 3 but get $any")
     }
     parser ? "(* 1 2 3)" match {
-      case Right(result) => result.asInstanceOf[Expression].eval(env) should be (Right(6))
+      case Success(result) => result.asInstanceOf[Expression].eval(env) should be (Success(6))
       case any => fail(s"expect product 1, 2, 3 but get $any")
     }
   }
@@ -48,12 +50,12 @@ class ExpressionSpec extends AnyFlatSpec with Matchers {
   "Complex" should "get result for simple expressions" in {
     val parser = new Parser
     parser ? "(+ 2 (* 2 3))" match {
-      case Right(result) => result.asInstanceOf[Expression].eval(env) should be (Right(8))
+      case Success(result) => result.asInstanceOf[Expression].eval(env) should be (Success(8))
       case any => fail(s"expect 8 but get $any")
     }
 
     parser ? "(/ (* 2 3) 2)" match {
-      case Right(result) => result.asInstanceOf[Expression].eval(env) should be (Right(3))
+      case Success(result) => result.asInstanceOf[Expression].eval(env) should be (Success(3))
       case any => fail(s"expect 3 but get $any")
     }
 

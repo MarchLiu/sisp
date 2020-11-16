@@ -4,6 +4,8 @@ import sisp.Repl.{env, parser}
 import sisp.ast.{Add, Def, Divide, Element, Env, Sub}
 import sisp.parsers.Parser
 
+import scala.util.{Success, Try}
+
 /**
  * TODO
  *
@@ -20,17 +22,17 @@ class DefSpec extends AnyFlatSpec with Matchers {
   env.put("/", new Divide)
 
   "Def" should "def a var and then use" in {
-    parse("(def pi 3.14)") should be (Right(3.14))
-    parse("(* 2 pi)") should be (Right(6.28))
+    parse("(def pi 3.14)") should be (Success(3.14))
+    parse("(* 2 pi)") should be (Success(6.28))
   }
 
-  def parse(source:String): Either[Exception, Any] = {
+  def parse(source:String): Try[Any] = {
     val parser = new Parser
 
     parser ask source flatMap {
       case element: Element => element.eval(env)
-      case result: Either[Exception, Any] => result
-      case any => Right(any)
+      case result: Try[Any] => result
+      case any => Success(any)
     }
   }
 }

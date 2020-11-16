@@ -3,6 +3,7 @@ package sisp.ast
 import sisp.ParserException
 
 import scala.jdk.javaapi.CollectionConverters
+import scala.util.{Failure, Success, Try}
 
 
 /**
@@ -14,22 +15,22 @@ import scala.jdk.javaapi.CollectionConverters
  */
 trait Lambda {
 
-  def prepare(env: Env, params: Seq[Any]): Either[Exception, Seq[Any]] = {
-    params.foldRight(Right(Nil): Either[Exception, List[Any]]) { (param, acc) =>
+  def prepare(env: Env, params: Seq[Any]): Try[Seq[Any]] = {
+    params.foldRight(Success(Nil): Try[List[Any]]) { (param, acc) =>
       for {
         xs <- acc
         x <- param match {
           case element: Element =>
             element.eval(env)
           case _ =>
-            Right(param)
+            Success(param)
         }
       } yield x :: xs
     }
   }
 
-  def sequenceU[T](params: Seq[Either[Exception, T]]): Either[Exception, List[T]] =
-    params.foldRight(Right(Nil): Either[Exception, List[T]]) { (elem, acc) =>
+  def sequenceU[T](params: Seq[Try[T]]): Try[List[T]] =
+    params.foldRight(Try(List[T]())) { (elem, acc) =>
       for {
         xs <- acc
         x <- elem
@@ -41,14 +42,14 @@ trait Lambda {
       (obj.isInstanceOf[Quote] && obj.asInstanceOf[Quote].value.isInstanceOf[Expression])
   }
 
-  def elements(obj: Any): Either[Exception, Seq[Any]] = obj match {
-    case seq: Seq[_] => Right(seq.asInstanceOf)
-    case list: java.util.List[_] => Right(CollectionConverters.asScala(list).toSeq)
-    case quote: Quote if quote.value.isInstanceOf[Expression] => Right(quote.value.asInstanceOf[Expression].elements)
-    case _ => Left(new ParserException(s"$obj is't a valid list"))
+  def elements(obj: Any): Try[Seq[Any]] = obj match {
+    case seq: Seq[_] => Success(seq.asInstanceOf)
+    case list: java.util.List[_] => Success(CollectionConverters.asScala(list).toSeq)
+    case quote: Quote if quote.value.isInstanceOf[Expression] => Success(quote.value.asInstanceOf[Expression].elements)
+    case _ => Failure(new ParserException(s"$obj is't a valid list"))
   }
 
-  def apply(env: Env, params: Seq[Any]): Either[Exception, Any]
+  def apply(env: Env, params: Seq[Any]): Try[Any]
 
 
 }

@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.Try
+
 /**
  * TODO
  *
@@ -8,5 +10,5 @@ package sisp.ast
  * @since 2020/07/26 14:55
  */
 class Name(val name:String) extends Element {
-  override def eval(env: Env): Either[Exception, Any] = env.get(name)
+  override def eval(env: Env): Try[Any] = env.get(name)
 }

@@ -3,6 +3,8 @@ import org.scalatest.matchers.should.Matchers
 import sisp.ast._
 import sisp.parsers.Parser
 
+import scala.util.Success
+
 /**
  * TODO
  *
@@ -28,7 +30,7 @@ class LetSpec extends AnyFlatSpec with Matchers {
 
   "Let" should "support local vars" in {
     parser ask "(let (pi 3.14) (* 2 pi))" flatMap {
-      env eval
-    } should be(Right(6.28))
+      exp => env.eval(exp)
+    } should be(Success(6.28))
   }
 }

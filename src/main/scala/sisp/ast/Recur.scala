@@ -1,5 +1,7 @@
 package sisp.ast
 
+import scala.util.Try
+
 /**
  * TODO
  *
@@ -8,7 +10,7 @@ package sisp.ast
  * @since 2020/08/04 21:07
  */
 class Recur extends Lambda {
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Any] = {
     sequenceU(params map env.eval) map RecurExpression
   }
 }

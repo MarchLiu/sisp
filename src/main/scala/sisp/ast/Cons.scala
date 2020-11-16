@@ -2,6 +2,8 @@ package sisp.ast
 
 import sisp.ParserException
 
+import scala.util.{Failure, Try}
+
 /**
  * TODO
  *
@@ -10,14 +12,14 @@ import sisp.ParserException
  * @since 2020/08/08 15:23
  */
 class Cons extends Lambda {
-  override def apply(env: Env, params: Seq[Any]): Either[Exception, Any] = {
+  override def apply(env: Env, params: Seq[Any]): Try[Any] = {
     if (params.size != 2) {
-      return Left(new ParserException(s"cons's formal (cons x seq) but get (cons $params)"))
+      return Failure(new ParserException(s"cons's formal (cons x seq) but get (cons $params)"))
     }
 
     env.eval(params(1)).flatMap { seq =>
       if(!isList(seq)) {
-        return Left(new ParserException(s"cons's formal (cons x seq) but get (cons $seq)"))
+        return Failure(new ParserException(s"cons's formal (cons x seq) but get (cons $seq)"))
       }
       for {
         value <- env eval params.head

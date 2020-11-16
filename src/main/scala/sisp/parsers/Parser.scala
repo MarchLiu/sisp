@@ -1,7 +1,9 @@
 package sisp.parsers
 
 import jaskell.parsec.Combinator.attempt
-import jaskell.parsec.{Parsec, State, Try}
+import jaskell.parsec.{Parsec, State}
+
+import scala.util.Try
 
 /**
  * TODO
@@ -10,14 +12,14 @@ import jaskell.parsec.{Parsec, State, Try}
  * @version 1.0.0
  * @since 2020/07/22 16:44
  */
-class Parser extends Parsec[Any, Char]{
-  lazy val expr: Try[Any, Char] = attempt(new ExprParser)
-  val number: Try[Any, Char] = attempt(new NumberParser)
-  val string: Try[Any, Char] = attempt(new StringParser)
-  val quote: Try[Any, Char] = attempt(new QuoteParser)
-  val name: Try[Any, Char] = attempt(new NameParser)
-  override def ask(s: State[Char]): Either[Exception, Any] = {
-    val parser: Parsec[Any, Char] = quote <|> expr <|> number <|> string <|> name
+class Parser extends Parsec[Char, Any]{
+  lazy val expr: Parsec[Char, Any] = attempt(new ExprParser)
+  val number: Parsec[Char, Any] = attempt(new NumberParser)
+  val string: Parsec[Char, Any] = attempt(new StringParser)
+  val quote: Parsec[Char, Any] = attempt(new QuoteParser)
+  val name: Parsec[Char, Any] = attempt(new NameParser)
+  override def ask(s: State[Char]): Try[Any] = {
+    val parser: Parsec[Char, Any] = quote <|> expr <|> number <|> string <|> name
     parser ? s
   }
 }
