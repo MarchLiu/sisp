@@ -3,7 +3,6 @@ package sisp.ast
 import sisp.ParserException
 
 import scala.collection.mutable
-import scala.collection.mutable.HashMap
 import scala.util.{Failure, Success, Try};
 
 /**
