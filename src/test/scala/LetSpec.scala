@@ -29,7 +29,7 @@ class LetSpec extends AnyFlatSpec with Matchers {
 
 
   "Let" should "support local vars" in {
-    parser ask "(let (pi 3.14) (* 2 pi))" flatMap {
+    parser apply "(let (pi 3.14) (* 2 pi))" flatMap {
       exp => env.eval(exp)
     } should be(Success(6.28))
   }

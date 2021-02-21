@@ -2,8 +2,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import sisp.ast.{Add, And, Def, Divide, Element, Env, Eq, Expression, Great, GreatOrEquals, If, IsFalse, IsTrue, Less, LessOrEquals, Sub}
 import sisp.parsers.Parser
-
-import scala.util.Success
+import org.scalatest.TryValues._
 
 /**
  * TODO
@@ -13,6 +12,8 @@ import scala.util.Success
  * @since 2020/07/30 18:19
  */
 class AndSpec extends AnyFlatSpec with Matchers {
+  import jaskell.Monad.toMonad
+
   import jaskell.parsec.Txt._
 
   val parser = new Parser
@@ -35,21 +36,17 @@ class AndSpec extends AnyFlatSpec with Matchers {
   env.put("<=", new LessOrEquals)
 
   "XAndY" should "true only (and true true)" in {
-    parser ask "(and (> 1 0) (> 2 1))" flatMap { element =>
-      element.asInstanceOf[Element].eval(env)
-    } should be (Success(true))
+    (parser apply  "(and (> 1 0) (> 2 1))" flatMap {_.asInstanceOf[Element].eval(env)})
+      .success.value shouldBe true
 
-    parser ask "(and (> 1 0) (< 2 1))" flatMap { element =>
-      element.asInstanceOf[Element].eval(env)
-    } should be (Success(false))
+    (parser apply  "(and (> 1 0) (< 2 1))" flatMap {_.asInstanceOf[Element].eval(env)})
+      .success.value shouldBe false
 
-    parser ask "(and (> 0 0) (> 2 1))" flatMap { element =>
-      element.asInstanceOf[Element].eval(env)
-    } should be (Success(false))
+    (parser apply  "(and (> 0 0) (> 2 1))" flatMap {_.asInstanceOf[Element].eval(env)})
+      .success.value shouldBe false
 
-    (parser ask "(and (> 0 abc) (> 2 1))" flatMap { element =>
-      element.asInstanceOf[Element].eval(env)
-    }).isFailure should be (true)
+    (parser apply  "(and (> 0 abc) (> 2 1))" flatMap {_.asInstanceOf[Element].eval(env)})
+      .isFailure shouldBe true
 
   }
 }

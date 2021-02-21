@@ -48,7 +48,7 @@ class Sisp extends Env{
   }
 
   def read(source: String): Try[Any] = {
-    parser ask source
+    parser apply source
   }
 
 

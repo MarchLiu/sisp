@@ -36,19 +36,19 @@ class OrSpec extends AnyFlatSpec with Matchers {
   env.put("<=", new LessOrEquals)
 
   "XOrY" should "true only (and true true)" in {
-    parser ask "(or (> 1 0) (> 2 1))" flatMap { element =>
+    parser apply "(or (> 1 0) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
     } should be (Success(true))
 
-    parser ask "(or (> 1 0) (< 2 1))" flatMap { element =>
+    parser apply "(or (> 1 0) (< 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
     } should be (Success(true))
 
-    parser ask "(or (>= 1 0) (> 2 1))" flatMap { element =>
+    parser apply "(or (>= 1 0) (> 2 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
     } should be (Success(true))
 
-    parser ask "(or (> 0 0) (> 1 1))" flatMap { element =>
+    parser apply "(or (> 0 0) (> 1 1))" flatMap { element =>
       element.asInstanceOf[Element].eval(env)
     } should be (Success(false))
   }

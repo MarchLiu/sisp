@@ -1,10 +1,10 @@
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import sisp.Repl.{env, parser}
-import sisp.ast.{Add, Def, Divide, Element, Env, Sub}
+import sisp.ast._
 import sisp.parsers.Parser
-
+import org.scalatest.TryValues._
 import scala.util.{Success, Try}
+
 
 /**
  * TODO
@@ -22,8 +22,8 @@ class DefSpec extends AnyFlatSpec with Matchers {
   env.put("/", new Divide)
 
   "Def" should "def a var and then use" in {
-    parse("(def pi 3.14)") should be (Success(3.14))
-    parse("(* 2 pi)") should be (Success(6.28))
+    parse("(def pi 3.14)").success.value shouldBe 3.14
+    parse("(* 2 pi)").success.value shouldBe 6.28
   }
 
   def parse(source:String): Try[Any] = {

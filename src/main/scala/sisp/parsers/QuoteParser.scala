@@ -15,7 +15,9 @@ import scala.util.Try
  * @since 2020/08/05 18:42
  */
 class QuoteParser extends Parsec[Char, Any]{
-  override def ask(s: State[Char]): Try[Any] = {
+  import jaskell.Monad.toMonad
+
+  override def apply(s: State[Char]): Try[Any] = {
     val parser = new Parser
     val psc = ch('\'') >> parser >>= {value => pack(new Quote(value))}
     psc ? s

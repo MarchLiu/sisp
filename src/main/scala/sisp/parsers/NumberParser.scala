@@ -15,7 +15,7 @@ import scala.util.Try
  */
 class NumberParser extends Parsec[Char, Any] {
   val parser: Decimal = decimal
-  override def ask(s: State[Char]): Try[Any] = {
+  override def apply(s: State[Char]): Try[Any] = {
     parser ? s map {result => NumberElement(result.toDouble)}
   }
 }

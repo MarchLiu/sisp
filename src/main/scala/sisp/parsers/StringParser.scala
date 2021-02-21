@@ -16,6 +16,8 @@ import scala.util.{Failure, Success, Try}
  * @since 2020/07/24 15:55
  */
 class StringParser extends Parsec[Char, Any] {
+  import jaskell.Monad.toMonad
+
   // val predicate: Char => Boolean = { c: Char => c != '"' && c != '\\' }
   // val char: Parsec[Char, Char] = is(predicate)
   val char: ChNone = chNone("\"\\")
@@ -31,7 +33,7 @@ class StringParser extends Parsec[Char, Any] {
   })
   lazy val parser: Parsec[Char, String] = between(ch('"'), ch('"'), many(escapeChar <|> char)) >>= mkString
 
-  override def ask(s: State[Char]): Try[String] = {
+  override def apply(s: State[Char]): Try[String] = {
     parser ? s
   }
 }

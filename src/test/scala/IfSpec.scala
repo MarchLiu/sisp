@@ -36,75 +36,75 @@ class IfSpec extends AnyFlatSpec with Matchers {
   env.put("<=", new LessOrEquals)
 
   "Equals" should "check equals" in {
-    parser ask "(if (== 5 5) 1 0)" flatMap { expr =>
+    parser apply "(if (== 5 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (== 5 5.0000001) 1 0)" flatMap { expr =>
+    parser apply "(if (== 5 5.0000001) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
   }
 
   "Greater" should "true if x > y " in {
-    parser ask "(if (> 5.0001 5) 1 0)" flatMap { expr =>
+    parser apply "(if (> 5.0001 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (> 5 5) 1 0)" flatMap { expr =>
+    parser apply "(if (> 5 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
 
-    parser ask "(if (> 5 5.1) 1 0)" flatMap { expr =>
+    parser apply "(if (> 5 5.1) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
   }
 
   "Less" should "true if x < y " in {
-    parser ask "(if (< -5 5) 1 0)" flatMap { expr =>
+    parser apply "(if (< -5 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (< 5 0.5) 1 0)" flatMap { expr =>
+    parser apply "(if (< 5 0.5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
 
-    parser ask "(if (< 5.1 5.1) 1 0)" flatMap { expr =>
+    parser apply "(if (< 5.1 5.1) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
   }
 
   "GreatOrEquals" should "true if x >= y " in {
-    parser ask "(if (>= 5.0001 5) 1 0)" flatMap { expr =>
+    parser apply "(if (>= 5.0001 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (>= 5 5) 1 0)" flatMap { expr =>
+    parser apply "(if (>= 5 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (>= 5 5.1) 1 0)" flatMap { expr =>
+    parser apply "(if (>= 5 5.1) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
   }
 
   "LessOrEquals" should "true if x <= y " in {
-    parser ask "(if (<= -5 5) 1 0)" flatMap { expr =>
+    parser apply "(if (<= -5 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (<= -0.5 -0.5) 1 0)" flatMap { expr =>
+    parser apply "(if (<= -0.5 -0.5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (< 5.1 5) 1 0)" flatMap { expr =>
+    parser apply "(if (< 5.1 5) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
 
-    parser ask "(if (< 1 1.5 2 2.1) 1 0)" flatMap { expr =>
+    parser apply "(if (< 1 1.5 2 2.1) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(1))
 
-    parser ask "(if (< 1 1.5 1 2.1) 1 0)" flatMap { expr =>
+    parser apply "(if (< 1 1.5 1 2.1) 1 0)" flatMap { expr =>
       expr.asInstanceOf[Expression].eval(env)
     } should be(Success(0))
   }

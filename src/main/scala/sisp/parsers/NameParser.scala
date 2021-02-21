@@ -15,10 +15,12 @@ import scala.util.Try
  * @since 2020/07/22 16:48
  */
 class NameParser extends Parsec[Char, Any] {
+  import jaskell.Monad.toMonad
+
   val predicate:Function[Char, Boolean] = {c => !(c==')'||c.isWhitespace)}
   val parser: Parsec[Char, Name] = many1(is(predicate)) >>= mkString >>= { name =>
     pack(new Name(name))
   }
 
-  override def ask(s: State[Char]): Try[Any] = parser ? s
+  override def apply(s: State[Char]): Try[Any] = parser ? s
 }

@@ -15,7 +15,7 @@ import scala.util.{Failure, Success}
  * @since 2020/07/16 22:20
  */
 object Repl {
-
+  import jaskell.parsec.Parsec._
   import jaskell.parsec.Txt._
 
   val parser = new Parser
@@ -36,10 +36,11 @@ object Repl {
   env.put("<=", new LessOrEquals)
 
   def main(args: Array[String]) {
+
     while (true) {
       print(prmt)
       val line = readLine()
-      parser ask line flatMap {
+      parser apply  line  flatMap  {
         case element: Element => element.eval(env)
         case result: Failure[Any] => result
         case any => Success(any)

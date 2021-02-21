@@ -16,10 +16,12 @@ import scala.util.Try
  * @since 2020/07/21 18:21
  */
 class ExprParser extends Parsec[Char, Any]{
+  import jaskell.Monad.toMonad
+
   val skip: SkipWhitespaces = skipWhiteSpaces
   val elementParser = new Parser
 
-  override def ask(s: State[Char]): Try[Element] = {
+  override def apply(s: State[Char]): Try[Element] = {
     val parser =
       between(ch('(') >> skip, skip >> ch(')'), sepBy1(elementParser, skip)) >>=
         {vals => pack(new Expression(vals))}

@@ -36,11 +36,11 @@ class DoSpec extends AnyFlatSpec with Matchers {
   env.put("<=", new LessOrEquals)
 
   "Do" should "run sources in sort" in {
-    parser ask "(do (+ 7 5) (- 3 1))" flatMap env.eval should be (Success(2))
+    parser apply "(do (+ 7 5) (- 3 1))" flatMap env.eval should be (Success(2))
   }
 
   "Do Def" should "run sources with def" in {
-    parser ask "(do (def pi 3.14) (+ 7 5) (- pi 1))" flatMap env.eval should be (Success(2.14))
+    parser apply "(do (def pi 3.14) (+ 7 5) (- pi 1))" flatMap env.eval should be (Success(2.14))
   }
 
 }
