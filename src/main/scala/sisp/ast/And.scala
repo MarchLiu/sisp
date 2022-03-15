@@ -12,7 +12,7 @@ import scala.util.{Failure, Success, Try}
 class And extends Lambda {
 
   override def apply(env: Env, params: Seq[Any]): Try[Boolean] = prepare(env, params) flatMap { elements =>
-    for (item <- params) {
+    for (item <- elements) {
       env.eval(item) map IsTrue.isTrue match {
         case failure: Failure[_] => return failure
         case Success(false) => return Success(false)
