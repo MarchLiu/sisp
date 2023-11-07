@@ -16,7 +16,7 @@ import scala.util.{Failure, Try}
  */
 class IsTrue extends Lambda {
   override def apply(env: Env, params: Seq[Any]): Try[Boolean] = {
-    if(params.size != 1){
+    if (params.size != 1) {
       return Failure(new ParserException(s"true? function require single parameter"))
     }
     env.eval(params.head) map IsTrue.isTrue
@@ -26,10 +26,10 @@ class IsTrue extends Lambda {
 
 object IsTrue {
   // isTrue not eval anything, just check it
-  def isTrue(param: Any) : Boolean = param match {
+  def isTrue(param: Any): Boolean = param match {
     case boolean: Boolean => boolean
     case number: Number => number.intValue() != 0
-    case either: Either[_,  _] => either.isRight
+    case either: Either[_, _] => either.isRight
     case t: Try[_] => t.isSuccess
     case opt: Option[_] => opt.isDefined
     case coll: util.Collection[_] => !coll.isEmpty

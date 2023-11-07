@@ -4,7 +4,7 @@ name := "sisp"
 
 version := "0.6.1"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.12"
 
 libraryDependencies ++= Seq(
   "io.github.marchliu" % "jaskell-core_2.13" % "0.7.1",
